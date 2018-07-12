@@ -22,6 +22,7 @@ export class HomePage {
   map: GoogleMap;
   coordsActual: Coordinates;
   area: Polygon;
+  area2: Polygon;
   constructor(public navCtrl: NavController, private geolocation: Geolocation) { }
 
   ionViewDidLoad() {
@@ -53,7 +54,23 @@ export class HomePage {
         marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
           alert('clicked');
         });
-        return this.createArea();
+        let POINTS: ILatLng[] = [
+          { lat: 4.669266, lng: -74.103907 },
+          { lat: 4.671147, lng: -74.102105},
+          { lat: 4.6710993, lng: -74.1041967 }
+        ];
+        
+        return this.createArea(POINTS);
+      }).then(poly => {
+        this.area2 = poly;
+        
+        let POINTS: ILatLng[] = [
+          { lat: 4.169266, lng: -74.503907 },
+          { lat: 4.171147, lng: -74.502105},
+          { lat: 4.1710993, lng: -74.5041967 }
+        ];
+        
+        return this.createArea(POINTS);
       }).then(poly => {
         this.area = poly;
         this.geolocation.watchPosition().subscribe((data) => {
@@ -78,17 +95,12 @@ export class HomePage {
     return GoogleMaps.create('map_canvas', mapOptions);
   }
 
-  createArea() {
-    let POINTS: ILatLng[] = [
-      { lat: 4.669266, lng: -74.103907 },
-      { lat: 4.671147, lng: -74.102105},
-      { lat: 4.6710993, lng: -74.1041967 }
-    ];
-    return this.map.addPolygon({
-      'points': POINTS,
-      'strokeColor': '#AA00FF',
-      'fillColor': '#00FFAA',
-      'strokeWidth': 10
-    });
+    createArea(POINTS) {
+      return this.map.addPolygon({
+        'points': POINTS,
+        'strokeColor': '#AA00FF',
+        'fillColor': '#00FFAA',
+        'strokeWidth': 10
+      });
   }
 }
